@@ -21,6 +21,7 @@ header {
 .blog-nav-item a {
   color: #cdddeb;
   text-decoration: none;
+  outline: none;
 }
 
 .blog-nav-item a:hover,
@@ -66,8 +67,10 @@ header {
 .table {
   width: 100%;
   table-layout: fixed;
+  font-size: 14px;
+  margin-bottom: 0;
 }
-.table th {
+.table tr th {
   text-align: center;
 }
 .table tr td, table tr th {
@@ -75,6 +78,7 @@ header {
   height: 32px;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding: 5px !important;
 }
 .table tr td {
   padding-left: 5px;

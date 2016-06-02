@@ -73,7 +73,7 @@
             $('.content').css({
                 "width": ($(window).width())+"px",
                 "height": ($(window).height() - 50) + "px"
-            })
+            });
         },
         render: function () {
             this.$el.empty();
@@ -88,7 +88,7 @@
             return this;
         },
         renderRows: function(cells){
-            var cells = cells || this.cells;
+            cells = cells || this.cells;
             var columnsNum = this.columns.length;
             var rowsNum = Math.ceil(cells.length / columnsNum);
 

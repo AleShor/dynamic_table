@@ -1,6 +1,51 @@
 function tableInit(){
 	"use strict";
 
+	var columns =[
+	    {name: 'Column 1'},
+	    {name: 'Column 2'},
+	    {name: 'Column 3'},
+	    {name: 'Column 4'},
+	    {name: 'Column 5'},
+	    {name: 'Column 6'},
+	    {name: 'Column 7'},
+	    {name: 'Column 8'}
+	];
+
+	var scrollbarWidth = getScrollBarWidth();
+
+	var contentHeight = $(document).height() - (40 + 10 + scrollbarWidth);
+	var cellHeight = 32;
+	var rowsNum = Math.floor(contentHeight / cellHeight) - 1 + 2;//10
+	var columnsNum = 8;
+	var limit = rowsNum * columnsNum;
+	var offset = 0;
+	var view;
+
+	dataDownload(offset, limit, function(data){		
+		view = new TableView({
+			columns: columns,
+			cells: data.result
+		});
+		view.render().$el.appendTo('.content');
+	});
+	
+	$(".content").scroll(function() {
+		var scrollTopH = $(".content").scrollTop();
+		var tableH = $("table").outerHeight();
+		var contentH = $(".content").height(); //contentH -= contentH % 32;
+		var topH = (tableH - contentH);//38
+		console.log("scrollTopH = " + scrollTopH + " | topH =  " + topH + " tableH = " + tableH + " contentH = " + contentH);
+
+	    if(scrollTopH >= topH) {
+	    	offset = offset+limit;
+	    	limit = 10*columnsNum;
+	      	dataDownload(offset, limit, function(data){
+				view.renderRows(data.result);
+		  	});
+	    }
+	});
+
 	function dataDownload(offset, limit, callback){
 		var url = "http://ivsevolod.ru/site/getData?offset="+offset+"&limit="+limit;
 	  	$.ajax({
@@ -17,7 +62,7 @@ function tableInit(){
 		});
 	}
 
-	function getScrollBarWidth () {  
+	function getScrollBarWidth() {
 	    var inner = document.createElement('p');  
 	    inner.style.width = "100%";  
 	    inner.style.height = "200px";  
@@ -42,45 +87,6 @@ function tableInit(){
 
 	    return (w1 - w2);  
 	}
-
-	var columns =[
-	    {name: 'Column 1'},
-	    {name: 'Column 2'},
-	    {name: 'Column 3'},
-	    {name: 'Column 4'},
-	    {name: 'Column 5'},
-	    {name: 'Column 6'},
-	    {name: 'Column 7'},
-	    {name: 'Column 8'}
-	];
-
-	var scrollbarWidth = getScrollBarWidth();
-
-	var contentHeight = $(document).height() - (40 + 10 + scrollbarWidth);
-	var cellHeight = 32;
-	var rowsNum = Math.floor(contentHeight / cellHeight) - 1 + 10;
-	var columnsNum = 8;
-	var limit = rowsNum * columnsNum;
-	var offset = 0;
-	var view;
-
-	dataDownload(offset, limit, function(data){		
-		view = new TableView({
-			columns: columns,
-			cells: data.result
-		});
-		view.render().$el.appendTo('.content');
-	});
-	
-	$(".content").scroll(function() {
-	    if($(".content").scrollTop() > $("table").height() - $(".content").height() + 38) {
-	    	offset = offset+limit;
-	    	limit = 10*columnsNum;
-	      	dataDownload(offset, limit, function(data){
-				view.renderRows(data.result);
-		  	});
-	    }
-	});
 }
 
 
